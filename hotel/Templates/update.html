@@ -1,0 +1,149 @@
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<!DOCTYPE html>
+  <html>
+    <head>
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<style>
+body {
+  background-color: #26a69a;
+  font-family: "Open Sans", sans-serif;
+  line-height: 1.25;
+}
+
+table{
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  width: 50%;
+  table-layout: fixed;
+}
+ table.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+
+table caption {
+  font-size: 1.5em;
+  margin: .5em 0 .75em;
+}
+
+table tr {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: .35em;
+  
+}
+
+table th,
+table td {
+  padding: .625em;
+  text-align: center;
+}
+
+table th {
+  font-size: .85em;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+@media screen and (max-width: 600px) {
+  table {
+    border: 0;
+  }
+
+  table caption {
+    font-size: 1.3em;
+  }
+  
+  table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  
+  table tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: .625em;
+  }
+  
+  table td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: .8em;
+    text-align: right;
+  }
+  
+  table td::before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  table td:last-child {
+    border-bottom: 0;
+  }
+}
+</style>
+
+
+<body>
+
+<table class='center'>
+  <caption>MY BOOKINGS</caption>
+  
+  
+  <thead>
+    <tr>
+      <th scope="col" width=55%>Rating    </th>
+      <th scope="col" width=55%>New Check-in   </th>
+      <th scope="col" width=55%>New Check-out   </th>
+      <th scope="col" width=75%>New Guests</th>
+     
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+		<tr>
+				<form method='post'>
+						{%csrf_token%}
+             <td><input type="number" min="0" max="5" name="crating"></td>
+             <td><input type="text" name="carrival" placeholder="Arrival" class="form__input"/></td>
+            <td><input type="text" name="cdeparture" placeholder="Departure" class="form__input" /></td>
+            <td><input type="number" min="0" max="5" name="cguests"></td>
+
+            {%if p.check == 'y'%}
+            <!--<td><input type="number" min="0" max="5" name="brating"></td>-->
+
+            
+            {%endif%}
+         
+            </form>
+            </tr>
+    
+  </tbody>
+</table>
