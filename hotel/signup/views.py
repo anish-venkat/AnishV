@@ -258,7 +258,7 @@ def account(request):
 
     
     
-def update(request):
+'''def update(request):
     global hotelupdate
     global datecheck
     global name
@@ -269,7 +269,7 @@ def update(request):
         newdeparture=request.POST['cdeparture']
         newguests=request.POST['cguests']
 
-    s="update table 
+    s="update table''' 
         
         
     

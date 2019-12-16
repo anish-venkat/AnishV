@@ -121,6 +121,7 @@ table th {
       <th scope="col">Hotel Name</th>
       <th scope="col">Check-in</th>
       <th scope="col">Check-out</th>
+      
       <th scope="col">Rating</th>
       <th scope="col">Update</th>
      
@@ -137,10 +138,17 @@ table th {
             <td><input type="hidden" name="bdeparture" value="{{p.departure}}">{{p.departure}}</td>
             {%if p.check == 'y'%}
             <td><input type="number" min="0" max="5" name="brating">
-
+            {%else%}
+            <td><p> - </p></td>
             
             {%endif%}
+            {%if p.check == 'n'%}
          <td align='center'><button class="btn" type="submit" value="Book Now" formaction="/accounts/">Update</button></td>
+            {%else%}
+            <td><p> - </p></td>
+            
+            {%endif%}
+
             </form>
             </tr>
     {%endfor%}
