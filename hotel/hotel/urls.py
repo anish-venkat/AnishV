@@ -26,6 +26,6 @@ urlpatterns = [
     path('book/', views.book),
     path('home/', views.home),
     path('accounts/', views.account),
-    #path('update/', views.update),
+    path('update/', views.update),
     
 ]

@@ -4,14 +4,31 @@ from signup.models import Search
 from django.http import HttpResponseRedirect
 from datetime import *
 import mysql.connector 
-con = mysql.connector.connect(host="localhost", user="root", passwd="root", database="sohan")
-mycursor= con.cursor()
+
 
 
 # Create your views here.
 pay=''
 check=0
 name='abc'
+check=0    
+name='abc'
+p=[]
+city ='abc'
+order = ''
+departure='bcd'
+arrival='pdf'   
+order='abc'
+hotelid='shg'
+hotelname='agd'
+l=[]
+hotelupdate='abc'        
+datecheck=0
+hotelidupdate='bcd'
+hoteldateupdate=''
+hoteldate2=''
+rating=0
+
 def home(request):
     global pay
     global check
@@ -37,9 +54,12 @@ def sign(request):
         password=request.POST['password']
         cpassword=request.POST["cpassword"]
         if cpassword==password:
+            con = mysql.connector.connect(host="localhost", user="root", passwd="root", database="sohan")
+            mycursor= con.cursor()
             mycursor.execute("use sohan")
             mycursor.execute("select semail, suser from signup_signup")
             x=mycursor.fetchall()
+            con.close()
             count=0
             for i in x:
                 if email in i:
@@ -73,8 +93,7 @@ def sign(request):
         
     #else:
        # return render(request,'Signup1.html')
-check=0    
-name='abc'
+
 def login(request):
     global name
     global check
@@ -107,9 +126,7 @@ def login(request):
         return render(request,"login.html")
 
 #creating a function to check the city entered by user and displaying hotels#
-p=[]
-city ='abc'
-order = ''
+
 
 def dicti():
     global order
@@ -118,11 +135,14 @@ def dicti():
     global arrival
     global departure
     p=[]
+    con = mysql.connector.connect(host="localhost", user="root", passwd="root", database="sohan")
+    mycursor= con.cursor()
     mycursor.execute("use sohan")
     
     mycursor.execute("select * from hotels where hotelcity ='"+city+"' and odate<='"+arrival+"' and cdate>='"+departure+"' order by "+order+"")
     r = mycursor.fetchall()
     l=list(r)
+    con.close()
     
     
 
@@ -134,9 +154,7 @@ def dicti():
         d['rating']=i[3]
         d['hotelid']=i[0]
         p.append(d)
-departure='bcd'
-arrival='pdf'   
-order='abc'     
+    
 def search(request):
     global city
     global order
@@ -169,9 +187,7 @@ def search(request):
 
 #Priting out a confirmation page.
 
-hotelid='shg'
-hotelname='agd'
-l=[]
+
 
 def dict2():
     global name
@@ -193,16 +209,22 @@ def book(request):
     global hotelid
     global hotelname
     global name
-    if request.method=="POST":
-        hotelid=request.POST['hotid']
-        hotelname=request.POST['bname']
-        dict2()
-    mycursor.execute("update history delete * where (username='{}' and hotelid='{} and )").format(name,hotel,)
-    mycursor.execute("insert into history values('{}','{}','{}','{}')".format(hotelid,arrival,departure,name))
+    if check==0:
+        return HttpResponseRedirect('/login/')
+    elif check==1:
+        if request.method=="POST":
+            hotelid=request.POST['hotid']
+            hotelname=request.POST['bname']
+            dict2()
+        #mycursor.execute("update history delete * where (username='{}' and hotelid='{} and )").format(name,hotel,)
+        con = mysql.connector.connect(host="localhost", user="root", passwd="root", database="sohan")
+        mycursor= con.cursor()    
+        mycursor.execute("insert into history values('{}','{}','{}','{}')".format(hotelid,arrival,departure,name))
     
-    con.commit()
+        con.commit()
+        con.close()
 
-    return render(request,'confirm1.html',{'pay':l})
+        return render(request,'confirmp.html',{'pay':l})
 
 '''def account(request):
     global hotelid
@@ -213,27 +235,33 @@ def book(request):
 
     mycursor.execute("use sohan")'''
     
-hotelupdate='abc'        
-datecheck=0
+
 def account(request):
     global hotelupdate
     global check
     global name
     global datecheck
+    global hotelidupdate
+    global hoteldateupdate
+    global hoteldate2
     if check==0:
         return HttpResponseRedirect('/login/')
     else:
-        mycursor.execute("select hotelname, arrival, departure from history,hotels where history.hotelid=hotels.hotelid and history.username='{}'".format(name))
+        con = mysql.connector.connect(host="localhost", user="root", passwd="root", database="sohan")
+        mycursor= con.cursor()
+        mycursor.execute("select history.hotelid, hotelname, arrival, departure from history,hotels where history.hotelid=hotels.hotelid and history.username='{}'".format(name))
         r = list(mycursor.fetchall())
+        con.close()
         c=[]
         for i in r:
             
             d1={}
             d1['name']=name
-            d1['arrival']=i[1]
-            d1['departure']=i[2]
-            d1['hotel']=i[0]
-            datecheck=i[1]
+            d1['arrival']=i[2]
+            d1['departure']=i[3]
+            d1['hotel']=i[1]
+            d1['hotelid']=i[0]
+            datecheck=i[2]
             #b= i[1].split('-')
             #for l in range(len(b)):
              #   b[l] = int(b[l])
@@ -242,16 +270,30 @@ def account(request):
                 #d1['check']='y'
             #else:
                 #d1['check']='n'
-            
-            
+             #(,'%b. %d, %Y')
+            sql2 = "select '{}'<(select curdate())".format(i[3])
+            con = mysql.connector.connect(host="localhost", user="root", passwd="root", database="sohan")
+            mycursor= con.cursor()  
+            mycursor.execute(sql2)
+            si = list(mycursor.fetchall())
+            if si[0][0] == 1:
+                d1['check'] = 'y'
+            elif si[0][0]==0:
+                d1['check'] = 'n'
+            print(si[0])
+    
             c.append(d1)
             
-        
-        
+        con.close()
+        print('hh',c)
         return render(request,"accounts.html",{'pay_l':c})
-    if request.method=="POST":
-        hotelupdate=request.POST['bhotel']
-        return HttpResponseRedirect('/search/')
+    #if request.method=="POST":
+     #   hotelupdate=request.POST['bhotel']
+      #  hotelidupdate=request.POST['bhotelid']
+      #  hoteldateupdate=request.POST['barrival']
+       # hoteldate2=request.POST['bdeparture']
+       # mycursor.execute("delete from history where username='{}' and hotelid='{}' and arrival='{}' and departure='{}'").format(name,hotelidupdate,hoteldateupdate,hoteldate2)
+       # return HttpResponseRedirect('/search/')
     
         
     
@@ -262,28 +304,98 @@ def account(request):
     global hotelupdate
     global datecheck
     global name
+    global hotelidupdate
+    global hoteldateupdate
+    global hoteldate2
 
     if request.method=="POST":
         newrating=request.POST['crating']
         newarrival=request.POST['carrival']
         newdeparture=request.POST['cdeparture']
         newguests=request.POST['cguests']
+        mycursor.execute("delete from history where username='{}' and hotelid='{}' and arrival='{}' and departure='{}'").format(name,hotelidupdate,hoteldateupdate,hoteldate2)
+        
 
-    s="update table''' 
-        
-        
-    
-        
-        
-        
-    
-        
-        
-        
-        
-        
+        return HttpResponseRedirect('/search/')
     
     
+    #else:
+        #return render(request,'update.html')'''
+    
+    
+        
+def update(request):
+    global hotelupdate
+    global datecheck
+    global name
+    global hotelidupdate
+    global hoteldateupdate
+    global hoteldate2
+
+    hotelupdate=request.POST['bhotel']
+    hotelidupdate=request.POST['bhotelid']
+    hoteldateupdate=request.POST['barrival']
+    hoteldate2=request.POST['bdeparture']
+    con = mysql.connector.connect(host="localhost", user="root", passwd="root", database="sohan")
+    mycursor= con.cursor()
+    sql="delete from history where username='{}' and hotelid='{}' and arrival='{}' and departure='{}'".format(name,hotelidupdate,datetime.strptime(hoteldateupdate,'%b. %d, %Y'),datetime.strptime(hoteldate2, '%b. %d, %Y'))
+    print('dd',sql)
+    mycursor.execute(sql)
+    con.commit()
+    con.close()
+    return HttpResponseRedirect('/search/')
+
+def cancel(request):
+    global hotelupdate
+    global datecheck
+    global name
+    global hotelidupdate
+    global hoteldateupdate
+    global hoteldate2
+
+    hotelupdate=request.POST['bhotel']
+    hotelidupdate=request.POST['bhotelid']
+    hoteldateupdate=request.POST['barrival']
+    hoteldate2=request.POST['bdeparture']
+    con = mysql.connector.connect(host="localhost", user="root", passwd="root", database="sohan")
+    mycursor= con.cursor()
+    sql="delete from history where username='{}' and hotelid='{}' and arrival='{}' and departure='{}'".format(name,hotelidupdate,datetime.strptime(hoteldateupdate,'%b. %d, %Y'),datetime.strptime(hoteldate2, '%b. %d, %Y'))
+    mycursor.execute(sql)
+    con.commit()
+    con.close()
+    return HttpResponseRedirect('/accounts/')
+
+def rating(request):
+    global hotelupdate
+    global datecheck
+    global name
+    global hotelidupdate
+    global hoteldateupdate
+    global hoteldate2
+    global rating
+
+    hotelupdate=request.POST['bhotel']
+    hotelidupdate=request.POST['bhotelid']
+    hoteldateupdate=request.POST['barrival']
+    hoteldate2=request.POST['bdeparture']
+    rating=request.POST['brating']
+    con = mysql.connector.connect(host="localhost", user="root", passwd="root", database="sohan")
+    mycursor= con.cursor()
+    sql="select ratings, No_ratings from hotels where hotelid='{}' and hotelname='{}'".format(hotelidupdate,hotelupdate)
+    mycursor.execute(sql)
+    fetch_rating=mycursor.fetchone()
+    rating1=int(fetch_rating[0])
+    no_ratings=int(fetch_rating[1])
+    newrating=((rating1*no_ratings)+rating)/(no_ratings+1)
+    no_ratings+=1
+    sql="update hotels set (ratings="+newrating+" and No_ratings="+no_ratings
+    mycursor.execute(sql)
+    con.commit()
+    con.close()
+    return HttpResponseRedirect('/accounts/')
+    
+    
+
     
 def logout(request):
     global check

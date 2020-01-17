@@ -1,3 +1,4 @@
+{%load static%}
 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <!-- Compiled and minified CSS  -->
@@ -6,6 +7,7 @@
 <!-- Compiled and minified JavaScript  -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
 
 <style>
 
@@ -16,7 +18,7 @@
 
   
     body{
-        background-image: url(back6.jpg)
+        background-image: url('{%static 'signup/images/back6.jpg'%}');
         background-size: cover;
     }
     .login{
@@ -44,21 +46,21 @@
     height:auto !important;
    }
   
-body {
+/*body {
   background: #26a69a;
   color: #888;
   font: 'Open Sans';
   font-size: 100%;
   overflow: hidden;
-}
+}*/
 @media (max-width: 450px) {
-  body {
+  /*body {
     background: #EBF3F5;
     overflow: scroll;
-  }
+  }*/
 }
 
-.diamond {
+/*.diamond {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -70,7 +72,7 @@ body {
   border-radius: 8px;
   box-shadow: 0px 0px 20px 3px rgba(17, 17, 17, 0.2);
   transition: all .5s ease-in-out;
-}
+}*/
 @media (max-width: 450px) {
   .diamond {
     display: none;
@@ -327,7 +329,9 @@ label {
   }
 }
 </style>
-    <div class="diamond"></div>
+<body background='/static/signup/images/back6.jpg' >
+    <header style="background-image: url('{%static 'signup/images/back6.jpg'%}')" ></header>
+   
     <div class="form-wrap">
       <h2 class="mob">Hotel Booking Form</h2>
       <h3 class="mob">Mobile Version</h3>
