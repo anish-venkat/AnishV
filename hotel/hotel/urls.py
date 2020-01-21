@@ -26,6 +26,7 @@ urlpatterns = [
     path('book/', views.book),
     path('home/', views.home),
     path('accounts/', views.account),
-    path('update/', views.update),
+    path('cancel/', views.cancel),
+    path('rating/', views.rating),
     
 ]

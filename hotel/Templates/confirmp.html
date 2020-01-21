@@ -25,11 +25,13 @@
       h1 {
           font-size: 60px;
           color: black;
+
       }
       
       h3 {
           font-size: 26px;
           color: black;
+          font-weight:600;
       }
 
       .italic {
@@ -106,6 +108,7 @@
               display: block;
               position: absolute;
               width: 100%;
+              opacity:0;
               top: calc(50% - 1px);
           }
 
@@ -251,16 +254,16 @@
                         <path d="M.6 1.4L116.9 52l117-50.6" class="st0" />
                     </svg>
                 </span>
-                <h3>Thank You</h3>
+                <h3>THANK YOU</h3>
             </div>
             <div class="sponsor"></div>
         </header>
         <div class="announcement">
             {% for p in pay %}
+            <h2>{{p.name}}</h2>
+            <h3>for staying at</h3>
             <h2>{{p.hotel}}</h2>
-            <h3>{{p.name}}</h3>
-            <h4>to stay at theirs from</h4>
-            <h4 class="italic">{{p.arrival}} to {{p.departure}}</h4>
+            <h4 class="italic">from {{p.arrival}} to {{p.departure}}</h4>
             {% endfor %}
         </div>
     </div>

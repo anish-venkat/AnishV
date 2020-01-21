@@ -70,7 +70,7 @@ def sign(request):
                     d3['wrong']="   This Email Is Already registered."
                     h.append(d3)
                     return render(request,'Signup1.html',{'wrong':h})
-                elif user in i:
+                elif name in i:
                     count= count + 1
                     
                     h1=[]
@@ -153,7 +153,9 @@ def dicti():
         d['name']=i[2]
         d['rating']=i[3]
         d['hotelid']=i[0]
+        d['price']=i[8]
         p.append(d)
+        print(d)
     
 def search(request):
     global city
@@ -324,7 +326,7 @@ def account(request):
     
     
         
-def update(request):
+def cancel(request):
     global hotelupdate
     global datecheck
     global name
@@ -343,9 +345,9 @@ def update(request):
     mycursor.execute(sql)
     con.commit()
     con.close()
-    return HttpResponseRedirect('/search/')
+    return HttpResponseRedirect('/accounts/')
 
-def cancel(request):
+def trial(request):
     global hotelupdate
     global datecheck
     global name
@@ -381,26 +383,26 @@ def rating(request):
     rating=request.POST['brating']
     con = mysql.connector.connect(host="localhost", user="root", passwd="root", database="sohan")
     mycursor= con.cursor()
-    sql="select ratings, No_ratings from hotels where hotelid='{}' and hotelname='{}'".format(hotelidupdate,hotelupdate)
+    sql="select ratings, No_rating from hotels where hotelid='{}' and hotelname='{}'".format(hotelidupdate,hotelupdate)
     mycursor.execute(sql)
     fetch_rating=mycursor.fetchone()
     rating1=int(fetch_rating[0])
     no_ratings=int(fetch_rating[1])
-    newrating=((rating1*no_ratings)+rating)/(no_ratings+1)
+    newrating=((rating1*no_ratings)+int(rating))/(no_ratings+1)
     no_ratings+=1
-    sql="update hotels set (ratings="+newrating+" and No_ratings="+no_ratings
+    sql="update hotels set ratings={} and No_rating = {}".format(rating1,no_ratings)
     mycursor.execute(sql)
     con.commit()
     con.close()
     return HttpResponseRedirect('/accounts/')
     
     
-
     
 def logout(request):
     global check
     global pay
     pay = ''
+    pay2 = ''
     check = 0
     name=''
     return HttpResponseRedirect('/login/')
