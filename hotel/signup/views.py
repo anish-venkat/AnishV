@@ -89,11 +89,7 @@ def sign(request):
                 return HttpResponseRedirect('/login/')
     else:
         return render(request,'Signup1.html')
-           # return render(request,'login.html')
-        
-    #else:
-       # return render(request,'Signup1.html')
-
+#function to obtain login details of user        
 def login(request):
     global name
     global check
@@ -228,17 +224,8 @@ def book(request):
 
         return render(request,'confirmp.html',{'pay':l})
 
-'''def account(request):
-    global hotelid
-    global hotelname
-    global name
-    global arrival
-    global departure
 
-    mycursor.execute("use sohan")'''
-    
-
-def account(request):
+ def account(request):
     global hotelupdate
     global check
     global name
@@ -264,15 +251,6 @@ def account(request):
             d1['hotel']=i[1]
             d1['hotelid']=i[0]
             datecheck=i[2]
-            #b= i[1].split('-')
-            #for l in range(len(b)):
-             #   b[l] = int(b[l])
-            #m = date(b[0],b[1],b[2])
-            #if i[1]>date.today():
-                #d1['check']='y'
-            #else:
-                #d1['check']='n'
-             #(,'%b. %d, %Y')
             sql2 = "select '{}'<(select curdate())".format(i[3])
             con = mysql.connector.connect(host="localhost", user="root", passwd="root", database="sohan")
             mycursor= con.cursor()  
@@ -289,44 +267,9 @@ def account(request):
         con.close()
         print('hh',c)
         return render(request,"accounts.html",{'pay_l':c})
-    #if request.method=="POST":
-     #   hotelupdate=request.POST['bhotel']
-      #  hotelidupdate=request.POST['bhotelid']
-      #  hoteldateupdate=request.POST['barrival']
-       # hoteldate2=request.POST['bdeparture']
-       # mycursor.execute("delete from history where username='{}' and hotelid='{}' and arrival='{}' and departure='{}'").format(name,hotelidupdate,hoteldateupdate,hoteldate2)
-       # return HttpResponseRedirect('/search/')
-    
-        
-    
-
     
     
-'''def update(request):
-    global hotelupdate
-    global datecheck
-    global name
-    global hotelidupdate
-    global hoteldateupdate
-    global hoteldate2
-
-    if request.method=="POST":
-        newrating=request.POST['crating']
-        newarrival=request.POST['carrival']
-        newdeparture=request.POST['cdeparture']
-        newguests=request.POST['cguests']
-        mycursor.execute("delete from history where username='{}' and hotelid='{}' and arrival='{}' and departure='{}'").format(name,hotelidupdate,hoteldateupdate,hoteldate2)
-        
-
-        return HttpResponseRedirect('/search/')
-    
-    
-    #else:
-        #return render(request,'update.html')'''
-    
-    
-        
-def cancel(request):
+ def cancel(request):
     global hotelupdate
     global datecheck
     global name
