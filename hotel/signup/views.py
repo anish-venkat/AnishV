@@ -29,6 +29,7 @@ hoteldateupdate=''
 hoteldate2=''
 rating=0
 
+#function that changes the homepage based on scenarios
 def home(request):
     global pay
     global check
@@ -44,9 +45,7 @@ def home(request):
        
         return render(request,"home.html",{'pay':h})
     
-
-    
-
+#function that allows a user to signup   
 def sign(request):
     if request.method=="POST":
         name=request.POST['username']
@@ -64,7 +63,6 @@ def sign(request):
             for i in x:
                 if email in i:
                     count= count + 1
-                    
                     h=[]
                     d3={}
                     d3['wrong']="   This Email Is Already registered."
@@ -72,14 +70,12 @@ def sign(request):
                     return render(request,'Signup1.html',{'wrong':h})
                 elif name in i:
                     count= count + 1
-                    
                     h1=[]
                     d4={}
                     d4['wrong']="   This Username Is Already registered."
                     h1.append(d4)
                     return render(request,'Signup1.html',{'wrong':h1})
-                    
-                    
+                        
             if count==0:
                 lst=Signup()
                 lst.suser=name
@@ -89,11 +85,9 @@ def sign(request):
                 return HttpResponseRedirect('/login/')
     else:
         return render(request,'Signup1.html')
-           # return render(request,'login.html')
-        
-    #else:
-       # return render(request,'Signup1.html')
 
+#function that takes login details of a user
+#and authenticates
 def login(request):
     global name
     global check
@@ -110,24 +104,13 @@ def login(request):
             if (post.spassword==password):
                 check=1
                 return HttpResponseRedirect('/home/')
-            
-            
             else:
-                
                 return render(request,"login.html",{'pay2':k})
-                '''lst=Login()
-        lst.user=username
-        lst.pwd=password
-    
-        lst.save()
-        return render(request,'offers.html')'''
     else:
         
         return render(request,"login.html")
 
-#creating a function to check the city entered by user and displaying hotels#
-
-
+#creating a function to check the city entered by user and displaying hotels
 def dicti():
     global order
     global p
@@ -138,16 +121,12 @@ def dicti():
     con = mysql.connector.connect(host="localhost", user="root", passwd="root", database="sohan")
     mycursor= con.cursor()
     mycursor.execute("use sohan")
-    
     mycursor.execute("select * from hotels where hotelcity ='"+city+"' and odate<='"+arrival+"' and cdate>='"+departure+"' order by "+order+"")
     r = mycursor.fetchall()
     l=list(r)
     con.close()
     
-    
-
-    for i in l:
-        
+    for i in l: 
         d={}
         d['city']=i[1]
         d['name']=i[2]
@@ -156,7 +135,8 @@ def dicti():
         d['price']=i[8]
         p.append(d)
         print(d)
-    
+
+#function that searches based on user-inputted values
 def search(request):
     global city
     global order
@@ -181,16 +161,10 @@ def search(request):
         lst2.save()
         dicti()
         return render(request,"result1.html",{'pay_l':p})
-    
-    
-    
     else:
         return render(request,"search.html")
 
-#Priting out a confirmation page.
-
-
-
+#printing out a confirmation page
 def dict2():
     global name
     global hotelid
@@ -206,7 +180,7 @@ def dict2():
     d1['hotel']=hotelname
     l.append(d1)
 
-
+#storing the booking
 def book(request):
     global hotelid
     global hotelname
@@ -218,26 +192,15 @@ def book(request):
             hotelid=request.POST['hotid']
             hotelname=request.POST['bname']
             dict2()
-        #mycursor.execute("update history delete * where (username='{}' and hotelid='{} and )").format(name,hotel,)
         con = mysql.connector.connect(host="localhost", user="root", passwd="root", database="sohan")
         mycursor= con.cursor()    
         mycursor.execute("insert into history values('{}','{}','{}','{}')".format(hotelid,arrival,departure,name))
-    
         con.commit()
         con.close()
 
         return render(request,'confirmp.html',{'pay':l})
 
-'''def account(request):
-    global hotelid
-    global hotelname
-    global name
-    global arrival
-    global departure
-
-    mycursor.execute("use sohan")'''
-    
-
+#displaying previous bookings
 def account(request):
     global hotelupdate
     global check
@@ -256,7 +219,6 @@ def account(request):
         con.close()
         c=[]
         for i in r:
-            
             d1={}
             d1['name']=name
             d1['arrival']=i[2]
@@ -264,15 +226,6 @@ def account(request):
             d1['hotel']=i[1]
             d1['hotelid']=i[0]
             datecheck=i[2]
-            #b= i[1].split('-')
-            #for l in range(len(b)):
-             #   b[l] = int(b[l])
-            #m = date(b[0],b[1],b[2])
-            #if i[1]>date.today():
-                #d1['check']='y'
-            #else:
-                #d1['check']='n'
-             #(,'%b. %d, %Y')
             sql2 = "select '{}'<(select curdate())".format(i[3])
             con = mysql.connector.connect(host="localhost", user="root", passwd="root", database="sohan")
             mycursor= con.cursor()  
@@ -283,49 +236,12 @@ def account(request):
             elif si[0][0]==0:
                 d1['check'] = 'n'
             print(si[0])
-    
-            c.append(d1)
-            
+            c.append(d1)  
         con.close()
         print('hh',c)
         return render(request,"accounts.html",{'pay_l':c})
-    #if request.method=="POST":
-     #   hotelupdate=request.POST['bhotel']
-      #  hotelidupdate=request.POST['bhotelid']
-      #  hoteldateupdate=request.POST['barrival']
-       # hoteldate2=request.POST['bdeparture']
-       # mycursor.execute("delete from history where username='{}' and hotelid='{}' and arrival='{}' and departure='{}'").format(name,hotelidupdate,hoteldateupdate,hoteldate2)
-       # return HttpResponseRedirect('/search/')
-    
-        
-    
 
-    
-    
-'''def update(request):
-    global hotelupdate
-    global datecheck
-    global name
-    global hotelidupdate
-    global hoteldateupdate
-    global hoteldate2
-
-    if request.method=="POST":
-        newrating=request.POST['crating']
-        newarrival=request.POST['carrival']
-        newdeparture=request.POST['cdeparture']
-        newguests=request.POST['cguests']
-        mycursor.execute("delete from history where username='{}' and hotelid='{}' and arrival='{}' and departure='{}'").format(name,hotelidupdate,hoteldateupdate,hoteldate2)
-        
-
-        return HttpResponseRedirect('/search/')
-    
-    
-    #else:
-        #return render(request,'update.html')'''
-    
-    
-        
+#allowing a user to cancel their booking based on the current date
 def cancel(request):
     global hotelupdate
     global datecheck
@@ -345,28 +261,9 @@ def cancel(request):
     mycursor.execute(sql)
     con.commit()
     con.close()
-    return HttpResponseRedirect('/accounts/')
+    return HttpResponseRedirect('/accounts/')       #refreshes the page after the cancellation
 
-def trial(request):
-    global hotelupdate
-    global datecheck
-    global name
-    global hotelidupdate
-    global hoteldateupdate
-    global hoteldate2
-
-    hotelupdate=request.POST['bhotel']
-    hotelidupdate=request.POST['bhotelid']
-    hoteldateupdate=request.POST['barrival']
-    hoteldate2=request.POST['bdeparture']
-    con = mysql.connector.connect(host="localhost", user="root", passwd="root", database="sohan")
-    mycursor= con.cursor()
-    sql="delete from history where username='{}' and hotelid='{}' and arrival='{}' and departure='{}'".format(name,hotelidupdate,datetime.strptime(hoteldateupdate,'%b. %d, %Y'),datetime.strptime(hoteldate2, '%b. %d, %Y'))
-    mycursor.execute(sql)
-    con.commit()
-    con.close()
-    return HttpResponseRedirect('/accounts/')
-
+#allowing a user to rate their stay based on the current date
 def rating(request):
     global hotelupdate
     global datecheck
@@ -394,10 +291,9 @@ def rating(request):
     mycursor.execute(sql)
     con.commit()
     con.close()
-    return HttpResponseRedirect('/accounts/')
-    
-    
-    
+    return HttpResponseRedirect('/accounts/')       #refreshes the pages
+
+#clearing variables that store information about the user logged in
 def logout(request):
     global check
     global pay
